@@ -1,6 +1,6 @@
 <?php
 
-$ip="127.0.0.8";
+
 $apachePort=":80";
 $pathFolder="/home/mehrez/Bureau/backend-web/web/";
 $serverName="archivage.dev";
@@ -12,7 +12,7 @@ $serverName="archivage.dev";
         Require all granted
 </Directory>
 */
-/* ici on verifie si ladresse ip locale est disponible ou deja utilisé */
+/* ici on genere   ladresse ip locale  disponible   */
 $arrayLigne = array();
             $handle = fopen("/etc/hosts", 'r');
             if ($handle) {
@@ -20,14 +20,19 @@ $arrayLigne = array();
                 while (!feof($handle)) { 
                     $i = $i + 1;                    
                     $buffer = fgets($handle);                    
-					if (preg_match("/127/i",$buffer)) {
-                        $arrayLigne[$i] = rtrim(ltrim($buffer));  
+		    if (preg_match("/127/i",$buffer)) {
+			 $buffer = intval(explode('.', $buffer)[3]);                      
+		         $arrayLigne[$i] =  $buffer ;  
                     }
                 }               
-                fclose($handle); 
+            fclose($handle); 
  }
-if (strpos(implode(" ",$arrayLigne), $ip) !== false) {
-   die(' port in use , try another'."\n"); 
+
+$nextOne = max($arrayLigne)+1;
+$ip="127.0.0.".$nextOne;
+
+if ( !$ip ) {
+   die(' internal error , try again'."\n"); 
 }
 
 $fichierconf =  sprintf("/etc/apache2/sites-available/%s.conf",$serverName);
@@ -61,5 +66,5 @@ if(!is_file($fichierconf)){
 }else{
 	die(' vhost error maybe already exist '."\n");
 }
-
+echo " all right now , try with your browser => ".$serverName."\n";
 
