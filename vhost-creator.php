@@ -1,11 +1,14 @@
 <?php
 
-
+if ( (!isset($argv[1]))|| (!isset($argv[2]))  ){
+	die(' missing params , try again'."\n");
+ } 
 $apachePort=":80";
-$pathFolder="/home/mehrez/Bureau/backend-web/web/";
-$serverName="archivage.dev";
 
-/* si le path folder n'est pas sous /var/www on doit modifier la config apache /etc/apache2/apache2.conf 
+$pathFolder = $argv[1]; ///* exemple */ "/var/www/backend-web/web/";
+$serverName = $argv[2]; ////* exemple *///$serverName="backend.dev";
+
+/* si le path folder n'est pas sous /var/www on doit modifier la config apache /etc/apache2/apache2.conf
 <Directory /home/mehrez/>
         Options Indexes FollowSymLinks
         AllowOverride None
@@ -16,23 +19,23 @@ $serverName="archivage.dev";
 $arrayLigne = array();
             $handle = fopen("/etc/hosts", 'r');
             if ($handle) {
-                $i = 0;               
-                while (!feof($handle)) { 
-                    $i = $i + 1;                    
-                    $buffer = fgets($handle);                    
+                $i = 0;
+                while (!feof($handle)) {
+                    $i = $i + 1;
+                    $buffer = fgets($handle);
 		    if (preg_match("/127/i",$buffer)) {
-			 $buffer = intval(explode('.', $buffer)[3]);                      
-		         $arrayLigne[$i] =  $buffer ;  
+			 $buffer = intval(explode('.', $buffer)[3]);
+		         $arrayLigne[$i] =  $buffer ;
                     }
-                }               
-            fclose($handle); 
+                }
+            fclose($handle);
  }
 
 $nextOne = max($arrayLigne)+1;
 $ip="127.0.0.".$nextOne;
 
 if ( !$ip ) {
-   die(' internal error , try again'."\n"); 
+   die(' internal error , try again'."\n");
 }
 
 $fichierconf =  sprintf("/etc/apache2/sites-available/%s.conf",$serverName);
