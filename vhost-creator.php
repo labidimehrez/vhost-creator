@@ -14,6 +14,9 @@ $serverName = $argv[2]; ////* exemple *///$serverName="backend.dev";
         AllowOverride None
         Require all granted
 </Directory>
+// dans le fichier /etc/apache2/sites-available/000-default.conf
+DocumentRoot /home/mehrez/www
+
 */
 /* ici on genere   ladresse ip locale  disponible   */
 $arrayLigne = array();
